@@ -1,0 +1,33 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "description": "A multi purpose discord bot",
+  "main": "src/main.ts",
+  "author": "BeanieMen",
+  "license": "AGPL-3.0-or-later",
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node out/main.js",
+    "dev": "tsx src/main.ts",
+    "build": "esbuild src/**/*.ts  --outdir=out --platform=node --format=esm",
+    "register": "tsx src/register.ts",
+    "lint": "eslint --fix ."
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.20.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    
+    "eslint": "^8.57.0",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.2"
+  }
+}
