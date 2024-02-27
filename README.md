@@ -6,11 +6,8 @@ This Discord bot is built using TypeScript and provides various commands to enha
 
 ## Commands
 
-- /color add - It gets the picture of the day from nasa's website
-- /chess - It gets the daily puzzle from lichess
-- /wordle - You can play a game of wordle with this command
-
-sudo docker run -it my-discord-bot:latest yarn start
+- /color add - Changes the color of a user's username
+- /color clear - Clears all colors server-wide
 
 ## Prerequisites
 
@@ -23,19 +20,19 @@ Before running the bot, ensure you have the following installed:
 1: Clone the repository
 
 ```bash
-git clone https://github.com/me505/MultiPurposeDiscordBot.git
+git clone https://github.com/BeanieMen/HueHueHue.git
 ```
 
 2: Change working directory
 
 ```bash
-cd MultiPurposeDiscordBot
+cd HueHueHue
 ```
 
 4: Run the image
 
 ```bash
-yarn tsx src/
+yarn build && yarn start
 ```
 
 ## Configuration
@@ -44,7 +41,7 @@ Make sure to put all necesarry tokens in .env or else the bot will not work
 
 ## Support
 
-For support, Please create a issue [here](https://github.com/me505/MultiPurposeDiscordBot/issues)
+For support, Please create a issue [here](https://github.com/BeanieMen/HueHueHue/issues)
 
 ## Licesnse
 
