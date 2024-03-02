@@ -10,6 +10,7 @@ export async function set(interaction: Interaction) {
     await interaction.reply("Not a valid hex code.");
     return;
   }
+  const roleColor = Number(`0x${colorCode.substring(1)}`);
 
   let start = interaction.guild.roles.cache.find(
     (role) => role.name === "<color>"
@@ -50,7 +51,7 @@ export async function set(interaction: Interaction) {
     try {
       role = await interaction.guild.roles.create({
         name: "fav color",
-        color: Number(`0x${colorCode.substring(1)}`),
+        color: roleColor,
         reason: `Creating a color role for ${user.displayName}`,
       });
     } catch (error) {
@@ -58,13 +59,12 @@ export async function set(interaction: Interaction) {
       await interaction.reply("There was an error creating the role.");
       return;
     }
-  } else {
+  } else if (role.color !== roleColor) {
     role.edit({
-      color: Number(`0x${colorCode.substring(1)}`),
+      color: roleColor,
     });
     console.log(`Edited role color for ${user.displayName}`);
   }
-
   role.setPosition(start.position - 1);
 
   if (user && role) {
