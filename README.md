@@ -29,7 +29,7 @@ git clone https://github.com/BeanieMen/HueHueHue.git
 cd HueHueHue
 ```
 
-4: Run the image
+4: Run the bot
 
 ```bash
 yarn build && yarn start
