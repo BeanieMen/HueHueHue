@@ -1,10 +1,9 @@
 interface OptionData {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
+  [key: string]: string | number | boolean;
 }
 
 export class MockInteraction {
-  options: { data: OptionData; getString: (sel: string) => string | null };
+  options: { data: OptionData; getString: (sel: string) => string | null, getBoolean: (sel: string) => boolean | null, getInteger: (sel: string) => number | null  };
   guild: { id: string; roles: { cache: object; find: (callback: (role: object) => boolean) => object | null } };
   replies: string;
   replied: boolean;
@@ -16,12 +15,31 @@ export class MockInteraction {
     this.replied = false;
     this.options = {
       data: data,
-      getString: (sel: string): string | null => {
-        if (sel === undefined || typeof sel !== "string") {
+      getBoolean:  (sel: string): boolean | null => {
+        if (sel === undefined) {
           return null;
         }
-        return this.options.data[sel];
+        if( typeof this.options.data[sel] === "boolean"){
+          return this.options.data[sel] as boolean
+        } else return null
       },
+      getInteger:  (sel: string): number | null => {
+        if (sel === undefined) {
+          return null;
+        }
+        if( typeof this.options.data[sel] === "number"){
+          return this.options.data[sel] as number
+        } else return null
+      },
+      getString: (sel: string): string | null => {
+        if (sel === undefined) {
+          return null;
+        }
+        if( typeof this.options.data[sel] === "string"){
+          return this.options.data[sel] as string
+        } else return null
+      },
+      
     };
     this.guild = {
       id: "guild-id",
