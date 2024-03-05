@@ -14,19 +14,25 @@
     "dev": "tsx src/main.ts",
     "build": "esbuild src/**/*.ts  --outdir=out --platform=node --format=esm",
     "register": "tsx src/register.ts",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "test": "jest"
   },
   "dependencies": {
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
-    "esbuild": "^0.20.1"
+    "esbuild": "^0.20.1",
+    "jest": "^29.7.0"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.10.0",
+    "@types/sinon": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
-    
     "eslint": "^8.57.0",
+    "sinon": "^17.0.1",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
     "tsx": "^4.6.0",
     "typescript": "^5.3.2"
   }

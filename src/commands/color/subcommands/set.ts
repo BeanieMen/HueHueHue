@@ -70,7 +70,7 @@ export async function set(interaction: Interaction) {
   if (user && role) {
     try {
       await user.roles.add(role);
-      console.log(`Role "${role.name}" has been added to ${user.user.tag}`);
+      console.log(`Role "${role.name}" has been added to ${user.displayName}`);
     } catch (error) {
       console.error("Error adding role to member:", error);
       await interaction.reply(

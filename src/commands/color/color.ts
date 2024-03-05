@@ -1,6 +1,6 @@
 import { Interaction } from "discord.js";
-import { set } from "./subcommands/color set.js";
-import { clear } from "./subcommands/color clear.js";
+import { set } from "./subcommands/set.js";
+import { clear } from "./subcommands/clear.js";
 
 export async function color(interaction: Interaction) {
   if (!interaction.isChatInputCommand()) return;
