@@ -1,7 +1,7 @@
 import { Collection } from "discord.js";
 import { OptionData, MockGuild, MockMember, MockRole } from "./mock-types";
 
-export class MockRoleClass {
+export class MockRoleManager {
   guild: MockGuild;
   cache: Collection<string, MockRole>;
 
@@ -18,6 +18,10 @@ export class MockRoleClass {
     const randomId = generateRandom16DigitString();
     const role: MockRole = {
       id: randomId,
+      name: options.name,
+      color: options.color ?? 0xffffff,
+      position: options.position ?? 0,
+
       setPosition: (position: number) => {
         if (position < 0) position = 0;
         const rolesToAdjust = this.cache.filter(
@@ -28,15 +32,15 @@ export class MockRoleClass {
 
         role.position = position;
       },
+
       delete: () => {
         this.cache.delete(role.id ?? "");
       },
+
       edit: (color: number) => {
         role.color = color
       },
-      name: options.name,
-      color: options.color ?? 0xffffff,
-      position: options.position ?? 0,
+
     };
     this.cache.set(randomId, role);
     return role;
@@ -82,7 +86,7 @@ export class MockInteraction {
 
     this.guild = guild ?? {
       id: "guild-id",
-      roles: new MockRoleClass(this.guild),
+      roles: new MockRoleManager(this.guild),
     };
 
     this.isCommand = isCommand;
