@@ -1,5 +1,5 @@
 import { MockInteraction } from './interaction.ts';
-import { ping } from '../src/commands/ping/ping.js';
+import ping from '../src/commands/ping/ping.js';
 import { Interaction } from 'discord.js';
 import {test, expect} from 'vitest'
 

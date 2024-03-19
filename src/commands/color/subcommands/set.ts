@@ -10,11 +10,49 @@ export async function set(interaction: Interaction) {
     await interaction.reply("Not a valid hex code.");
     return;
   }
-  const roleColor = Number(`0x${colorCode.substring(1)}`);
-  let role = interaction.guild.roles.cache.find(
+
+  const roles = interaction.guild.roles.cache.filter(
     (role) => role.name === "fav color"
   );
+
+  // marker
+  let start = interaction.guild.roles.cache.find(
+    (role) => role.name === "<color>"
+  );
+  let end = interaction.guild.roles.cache.find(
+    (role) => role.name === "</color>"
+  );
+
+  if (!start) {
+    const startPos = roles.first()?.position;
+    start = await interaction.guild.roles.create({
+      name: "<color>",
+      color: 0x000000,
+      reason: `Creating a color marker`,
+    });
+    if (startPos) {
+      start?.setPosition(startPos + 1);
+    }
+  }
+
+  if (!end) {
+    const endPos = roles.last()?.position;
+    end = await interaction.guild.roles.create({
+      name: "</color>",
+      color: 0x000000,
+      reason: `Creating a color marker`,
+    });
+    if (endPos) {
+      end?.setPosition(endPos - 1);
+    } else {
+      end?.setPosition(start?.position-1)
+    }
+  }
+
   const user = interaction.member as GuildMember;
+
+  const roleColor = Number(`0x${colorCode.substring(1)}`);
+  let role = user.roles.cache.find((role) => role.name === "fav color");
 
   if (!role) {
     try {
@@ -34,6 +72,7 @@ export async function set(interaction: Interaction) {
     });
     console.log(`Edited role color for ${user.displayName}`);
   }
+  
 
   if (user && role) {
     try {
@@ -47,6 +86,7 @@ export async function set(interaction: Interaction) {
       return;
     }
   }
+  role.setPosition(end.position+1)
 
   await interaction.reply(colorCode);
 }

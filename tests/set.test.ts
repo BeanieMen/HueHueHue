@@ -42,5 +42,40 @@ test("checks assignment of role to user", async () => {
   expect(interaction.replies).toBe("#696969");
   expect(role?.name).toBe("fav color")
   expect(role?.color).toEqual(0x696969)
+});
 
+test("checks the position of the roles", async () => {
+  let interaction = new MockInteraction({ color: "#696969" }, true);
+  await set(interaction as unknown as Interaction);
+  interaction = new MockInteraction({ color: "#121212" }, true, "ben", interaction.guild);
+  await set(interaction as unknown as Interaction);
+  
+  const beaniesColor = interaction.guild.roles.cache.find(
+    (role) => role.color === 0x696969
+  );
+  const bensColor = interaction.guild.roles.cache.find(
+    (role) => role.color === 0x121212
+  )
+  const start = interaction.guild.roles.cache.find(
+    (role) => role.name === "<color>"
+  );
+  const end = interaction.guild.roles.cache.find(
+    (role) => role.name === "</color>"
+  );
+
+  expect(start?.position).toEqual(3);
+  expect(beaniesColor?.position).toEqual(2);
+  expect(bensColor?.position).toEqual(1)
+  expect(end?.position).toEqual(0);
+});
+
+test ("tests when two users want same color", async () => {
+  let interaction = new MockInteraction({ color: "#696969" }, true);
+  await set(interaction as unknown as Interaction);
+  interaction = new MockInteraction({ color: "##696969" }, true, "ben", interaction.guild);
+  await set(interaction as unknown as Interaction);
+
+  const roles = interaction.guild.roles.cache.filter((role) => role.name === "fav color")
+  expect(roles.size).toEqual(1)
+  
 });

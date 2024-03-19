@@ -1,12 +1,7 @@
 import { Collection } from "discord.js";
-interface OptionData {
-  [key: string]: string;
-}
+import { OptionData, MockGuild, MockMember, MockRole } from "./mock-types";
 
-export interface Role {
-  name: string;
-  color?: number;
-}
+
 
 export class MockInteraction {
   options: {
@@ -14,24 +9,13 @@ export class MockInteraction {
     getString: (key: string) => string | null;
   };
 
-  guild: {
-    id: string;
-    roles: { cache: Collection<string, Role>, create: (options: Role) => Role };
-  };
-
-  member: {
-    displayName: string;
-    roles: {
-      add: (role: Role) => void,
-      cache: Collection<string, Role>
-    };
-  };
-
+  guild: MockGuild
+  member: MockMember
   replies: string;
   replied: boolean;
   isCommand: boolean;
 
-  constructor(data: OptionData, isCommand = false) {
+  constructor(data: OptionData, isCommand = false, member?: string, guild?: MockGuild | undefined) {
     this.replies = "";
     this.replied = false;
 
@@ -41,23 +25,36 @@ export class MockInteraction {
     };
 
     this.member = {
-      displayName: "beanieeman",
+      displayName: member ?? "beanieeman",
       roles: {
-        add: (role: Role) => (this.member.roles.cache.set(role.name, role)),
-        cache: new Collection<string, Role>(),
+        add: (role: MockRole) => this.member.roles.cache.set(role.name, role),
+        cache: new Collection<string, MockRole>(),
       },
     };
 
-    this.guild = {
+
+    this.guild = guild ?? {
       id: "guild-id",
       roles: {
-        cache: new Collection<string, Role>(),
+        cache: new Collection<string, MockRole>(),
         create: (options) => {
-          const role: Role = {
+          const randomId = generateRandom16DigitString();
+          const role: MockRole = {
+            setPosition: (position: number) => {
+              if (position < 0) position = 0;
+              const rolesToAdjust = this.guild.roles.cache.filter(
+                (role) => role.position! >= position
+              );
+
+              rolesToAdjust.forEach((role) => (role.position! += 1));
+
+              role.position = position;
+            },
             name: options.name,
             color: options.color ?? 0xffffff,
+            position: options.position ?? 0,
           };
-          this.guild.roles.cache.set(role.name, role);
+          this.guild.roles.cache.set(randomId, role);
           return role;
         },
       },
@@ -77,5 +74,12 @@ export class MockInteraction {
   }
 }
 
-// const interaction = new MockInteraction({}, true)
-// interaction.member.roles.cache.find
+function generateRandom16DigitString() {
+  const chars =
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  let result = "";
+  for (let i = 0; i < 16; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
