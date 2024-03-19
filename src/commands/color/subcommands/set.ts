@@ -51,6 +51,7 @@ export async function set(interaction: Interaction) {
 
   const user = interaction.member as GuildMember;
 
+
   const roleColor = Number(`0x${colorCode.substring(1)}`);
   let role = user.roles.cache.find((role) => role.name === "fav color");
 

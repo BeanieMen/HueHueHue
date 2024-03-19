@@ -4,10 +4,13 @@ export interface OptionData {
   [key: string]: string;
 }
 export interface MockRole {
-  setPosition: (position: number) => void;
+  setPosition?: (position: number) => void;
   name: string;
   color?: number;
   position?: number;
+  id?: string;
+  delete?: () => void
+  edit?: (number) => void
 }
 export interface MockMember {
   displayName?: string;
