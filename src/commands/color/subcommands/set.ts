@@ -11,37 +11,6 @@ export async function set(interaction: Interaction) {
     return;
   }
   const roleColor = Number(`0x${colorCode.substring(1)}`);
-
-  let start = interaction.guild.roles.cache.find(
-    (role) => role.name === "<color>"
-  );
-  let end = interaction.guild.roles.cache.find(
-    (role) => role.name === "</color>"
-  );
-  if (!start) {
-    try {
-      start = await interaction.guild.roles.create({
-        name: "<color>",
-        reason: `Creating markers`,
-      });
-    } catch (error) {
-      console.error("Error creating markers:", error);
-      return;
-    }
-  }
-  if (!end) {
-    try {
-      end = await interaction.guild.roles.create({
-        name: "</color>",
-        reason: `Creating markers`,
-      });
-    } catch (error) {
-      console.error("Error creating markers:", error);
-      return;
-    }
-  }
-  await end.setPosition(start.position - 1);
-
   let role = interaction.guild.roles.cache.find(
     (role) => role.name === "fav color"
   );
@@ -65,7 +34,6 @@ export async function set(interaction: Interaction) {
     });
     console.log(`Edited role color for ${user.displayName}`);
   }
-  role.setPosition(start.position - 1);
 
   if (user && role) {
     try {

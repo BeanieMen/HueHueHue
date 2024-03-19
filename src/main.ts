@@ -1,6 +1,6 @@
-import { Client, GatewayIntentBits, Interaction } from "discord.js";
+import { Client, GatewayIntentBits } from "discord.js";
 import { config } from "dotenv";
-
+import Commands from "./commands";
 config();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -13,24 +13,13 @@ client.on("ready", () => {
 });
 
 client.on("interactionCreate", async (interaction) => {
-  console.log(interaction)
   if (!interaction.isChatInputCommand()) return;
-  let module: {
-    [cmdName: string]: (interaction: Interaction) => Promise<void>;
-  } = {};
-  
-  try {
-    module = await import(
-      `./commands/${interaction.commandName}/${interaction.commandName}.js`
-    );
-  } catch (error) {
-    console.log(error);
-    await interaction.reply("There was internal error, please try again later");
-    return;
+  const command = Commands.get(interaction.commandName);
+  if (!command) {
+    await interaction.reply("There was a internal server error");
+    console.error(`Command for ${interaction.commandName} was not found`);
   }
-
-  const command = module[interaction.commandName];
-  await command(interaction);
+  await command!(interaction);
 });
 
 await client.login(process.env.TOKEN);

@@ -2,7 +2,7 @@ import { Interaction } from "discord.js";
 import { set } from "./subcommands/set.js";
 import { clear } from "./subcommands/clear.js";
 
-export async function color(interaction: Interaction) {
+export default async function color(interaction: Interaction) {
   if (!interaction.isChatInputCommand()) return;
   const subCommand  = interaction.options.getSubcommand()
   switch (subCommand) {
@@ -13,5 +13,4 @@ export async function color(interaction: Interaction) {
       await clear(interaction);
       break;
   }
-
 }
