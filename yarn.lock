@@ -61,6 +61,16 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@beanieman/discordjs-mock@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@beanieman/discordjs-mock/-/discordjs-mock-1.0.3.tgz#b3930dd52c613681053ac1997e3e887a47dba764"
+  integrity sha512-IwrPXmPBMCaNwCICzZ5Ia8UHUH7zgR44UAD9wNtYC5aVxamzr1NFuQQ2ihPmui13Hl9lG7I6koWjmOd4PZJI7A==
+  dependencies:
+    "@sapphire/snowflake" "^3.5.3"
+    discord.js "^14.14.1"
+    lodash "^4.17.21"
+    vitest "^1.4.0"
+
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
@@ -713,6 +723,11 @@
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/@sapphire/snowflake/-/snowflake-3.5.2.tgz#ca3d11a0011563c90b103f8ef398f2dea3e7beb4"
   integrity sha512-FTm9RdyELF21PQN5dS/HLRs90XqWclHa+p0gkonc+BA2X2QKfFySHSjUbO65rmArd/ghR9Ahj2fMfedTZEqzOw==
+
+"@sapphire/snowflake@^3.5.3":
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/@sapphire/snowflake/-/snowflake-3.5.3.tgz#0c102aa2ec5b34f806e9bc8625fc6a5e1d0a0c6a"
+  integrity sha512-jjmJywLAFoWeBi1W7994zZyiNWPIiqRRNAmSERxyg93xRGzNYvGjlZ0gR6x0F4gPRi2+0O6S71kOZYyr3cxaIQ==
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"

@@ -15,9 +15,10 @@
     "build": "esbuild src/**/*.ts  --outdir=out --platform=node --format=esm",
     "register": "tsx src/register.ts",
     "lint": "eslint --fix .",
-    "test": "jest"
+    "test": "vitest"
   },
   "dependencies": {
+    "@beanieman/discordjs-mock": "^1.0.3",
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
     "esbuild": "^0.20.1"
