@@ -1,7 +1,7 @@
 import { Interaction } from "discord.js";
 import { clear } from "../src/commands/color/subcommands/clear.js";
-import { MockInteraction } from "./interaction";
 import { test, expect } from "vitest";
+import { MockInteraction } from "./mock.js";
 
 test("checks if roles get cleared", async () => {
   const interaction = new MockInteraction({}, true);

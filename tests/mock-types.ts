@@ -1,29 +1,49 @@
-import { Collection } from "discord.js";
+import { Collection, Snowflake } from "discord.js";
 
 export interface OptionData {
   [key: string]: string;
 }
-export interface MockRole {
-  setPosition?: (position: number) => void;
+export interface IRole {
+  guild: IGuild;
+  setPosition: (position: number) => void;
   name: string;
-  color?: number;
-  position?: number;
-  id?: string;
-  delete?: () => void
-  edit?: (number) => void
+  color: number;
+  position: number;
+  id: Snowflake;
+  delete: () => void;
+  edit: (color: number) => void;
 }
-export interface MockMember {
+export interface IMember {
   displayName?: string;
   roles: {
-    add: (role: MockRole) => void;
-    cache: Collection<string, MockRole>;
+    add: (role: IRole) => void;
+    cache: Collection<Snowflake, IRole>;
   };
 }
 
-export interface MockGuild {
-  id: string;
-  roles: {
-    cache: Collection<string, MockRole>;
-    create: (options: MockRole) => MockRole;
-  };
+export interface IGuild {
+  id: Snowflake;
+  roles: IRoleManager;
+}
+
+export interface IRoleManager {
+  guild: IGuild;
+  cache: Collection<Snowflake, IRole>;
+  create(opts: {
+    name: string;
+    color?: number;
+    reason?: string;
+    position?: number;
+  }): Promise<IRole>;
+}
+
+export interface IInteracion {
+  options: { data: OptionData; getString: (key: string) => string | null };
+  guild: IGuild;
+  member: IMember;
+  replies: string;
+  replied: boolean;
+  isCommand: boolean;
+  reply:(msg: string) => void
+  isChatInputCommand: () => boolean
 }

@@ -1,7 +1,7 @@
-import { MockInteraction } from './interaction.ts';
 import ping from '../src/commands/ping/ping.js';
 import { Interaction } from 'discord.js';
 import {test, expect} from 'vitest'
+import { MockInteraction } from './mock.js';
 
 test('ping function should reply with "PONG!" for a chat input command', async () => {
   const interaction = new MockInteraction({}, true);

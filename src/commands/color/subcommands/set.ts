@@ -54,7 +54,6 @@ export async function set(interaction: Interaction) {
 
   const roleColor = Number(`0x${colorCode.substring(1)}`);
   let role = user.roles.cache.find((role) => role.name === "fav color");
-
   if (!role) {
     try {
       role = await interaction.guild.roles.create({
@@ -72,6 +71,7 @@ export async function set(interaction: Interaction) {
       color: roleColor,
     });
     console.log(`Edited role color for ${user.displayName}`);
+    return
   }
   
 

@@ -1,7 +1,7 @@
-import { MockInteraction, MockMemberClass } from "./interaction.js";
 import { set } from "../src/commands/color/subcommands/set.js";
 import { test, expect } from "vitest";
 import { Interaction } from "discord.js";
+import { MockInteraction, MockMember } from "./mock.js";
 
 test("sets the role name and color for a valid hex code", async () => {
   const interaction = new MockInteraction({ color: "#ff0000" }, true);
@@ -80,7 +80,7 @@ test("tests when two users want same color", async () => {
     { color: "##696969" },
     true,
     interaction.guild,
-    new MockMemberClass("ben")
+    new MockMember("ben")
   );
   await set(interaction as unknown as Interaction);
 
@@ -102,13 +102,12 @@ test("tests when users want some other color while already having one", async ()
     interaction.member
   );
   await set(interaction2 as unknown as Interaction);
-
+  
   const roles = interaction2.guild.roles.cache.filter(
     (role) => role.name === "fav color"
-  );
+  )
   if (roleId){
     expect(interaction.guild.roles.cache.get(roleId)?.color).toEqual({color: 0x111111})
-
   }
   expect(roles.size).toEqual(1);
 });
