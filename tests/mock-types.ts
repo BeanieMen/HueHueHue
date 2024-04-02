@@ -35,6 +35,7 @@ export interface IRoleManager {
     reason?: string;
     position?: number;
   }): Promise<IRole>;
+  setPosition: (role: IRole, position:number) => void
 }
 
 export interface IInteracion {

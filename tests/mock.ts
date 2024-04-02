@@ -1,6 +1,5 @@
 import { Snowflake, SnowflakeUtil, Collection } from "discord.js";
 import { IGuild, IInteracion, IMember, IRole, IRoleManager, OptionData } from "./mock-types";
-
 export class MockInteraction implements IInteracion {
   options: {
     data: OptionData;
@@ -87,12 +86,7 @@ export class MockRole implements IRole {
     this.guild = opts.guild;
   }
   setPosition(position: number) {
-    if (position < 0) position = 0;
-    const rolesToAdjust = this.guild.roles.cache.filter(
-      (role) => role.position! >= position
-    );
-    rolesToAdjust.forEach((role) => (role.position! += 1));
-    this.position = position;
+    this.guild.roles.setPosition(this, position)
   }
 
   delete() {
@@ -129,6 +123,16 @@ export class MockRoleManager implements IRoleManager {
     this.cache.set(role.id, role);
     return Promise.resolve(role);
   }
+
+  setPosition(role:MockRole, position: number) {
+    if (position < 0) position = 0;
+    const rolesToAdjust = this.guild.roles.cache.filter(
+      (role) => role.position! >= position
+    );
+    rolesToAdjust.forEach((role) => (role.position! += 1));
+    role.position = position;
+  }
+
 }
 
 
