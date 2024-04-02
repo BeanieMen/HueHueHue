@@ -29,5 +29,5 @@ test("checks if non color roles get cleared", async () => {
 test("checks if non color roles get cleared", async () => {
   const interaction = new MockInteraction({}, false);
   await clear(interaction as unknown as Interaction);
-  expect(interaction).toBe(interaction)
+  expect(interaction).toBe(interaction);
 });

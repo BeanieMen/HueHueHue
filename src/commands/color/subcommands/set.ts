@@ -12,15 +12,15 @@ export async function set(interaction: Interaction) {
   }
 
   const roles = interaction.guild.roles.cache.filter(
-    (role) => role.name === "fav color"
+    (role) => role.name === "fav color",
   );
 
   // marker
   let start = interaction.guild.roles.cache.find(
-    (role) => role.name === "<color>"
+    (role) => role.name === "<color>",
   );
   let end = interaction.guild.roles.cache.find(
-    (role) => role.name === "</color>"
+    (role) => role.name === "</color>",
   );
 
   if (!start) {
@@ -31,7 +31,7 @@ export async function set(interaction: Interaction) {
       reason: `Creating a color marker`,
     });
     if (startPos) {
-      start?.setPosition(startPos + 1);
+      await start?.setPosition(startPos + 1);
     }
   }
 
@@ -43,14 +43,13 @@ export async function set(interaction: Interaction) {
       reason: `Creating a color marker`,
     });
     if (endPos) {
-      end?.setPosition(endPos - 1);
+      await end?.setPosition(endPos - 1);
     } else {
-      end?.setPosition(start?.position-1)
+      await end?.setPosition(start?.position - 1);
     }
   }
 
   const user = interaction.member as GuildMember;
-
 
   const roleColor = Number(`0x${colorCode.substring(1)}`);
   let role = user.roles.cache.find((role) => role.name === "fav color");
@@ -67,13 +66,12 @@ export async function set(interaction: Interaction) {
       return;
     }
   } else if (role.color !== roleColor) {
-    role.edit({
+    await role.edit({
       color: roleColor,
     });
     console.log(`Edited role color for ${user.displayName}`);
-    return
+    return;
   }
-  
 
   if (user && role) {
     try {
@@ -82,12 +80,12 @@ export async function set(interaction: Interaction) {
     } catch (error) {
       console.error("Error adding role to member:", error);
       await interaction.reply(
-        "There was an error adding the role to the member."
+        "There was an error adding the role to the member.",
       );
       return;
     }
   }
-  role.setPosition(end.position+1)
+  await role.setPosition(end.position + 1);
 
   await interaction.reply(colorCode);
 }

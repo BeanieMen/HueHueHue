@@ -35,7 +35,7 @@ export interface IRoleManager {
     reason?: string;
     position?: number;
   }): Promise<IRole>;
-  setPosition: (role: IRole, position:number) => void
+  setPosition: (role: IRole, position: number) => void;
 }
 
 export interface IInteracion {
@@ -45,6 +45,6 @@ export interface IInteracion {
   replies: string;
   replied: boolean;
   isCommand: boolean;
-  reply:(msg: string) => void
-  isChatInputCommand: () => boolean
+  reply: (msg: string) => void;
+  isChatInputCommand: () => boolean;
 }
