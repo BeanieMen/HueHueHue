@@ -1,4 +1,6 @@
 import { Interaction } from "discord.js";
+import { colorRole } from "../../../constants";
+const colorRoleName = await colorRole;
 
 export async function clear(interaction: Interaction) {
   if (!interaction.isChatInputCommand()) return;
@@ -6,12 +8,14 @@ export async function clear(interaction: Interaction) {
 
   const colorRoles = guild?.roles.cache.filter(
     (role) =>
-      role.name === "fav color" ||
+      role.name === colorRoleName ||
       role.name === "<color>" ||
-      role.name === "</color>",
+      role.name === "</color>"
   );
+  console.log(colorRoles);
   colorRoles?.forEach(async (role) => {
     await role.delete();
   });
+
   await interaction.reply("Successfully cleared all color roles");
 }

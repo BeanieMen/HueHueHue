@@ -17,6 +17,11 @@ const commands = [
         type: 1,
       },
       {
+        name: "status",
+        description: "Shows the current status of the color roles",
+        type: 1,
+      },
+      {
         name: "set",
         description: "Sets the color of the user's usernames",
         type: 1,

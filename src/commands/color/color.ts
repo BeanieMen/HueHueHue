@@ -1,6 +1,7 @@
 import { Interaction } from "discord.js";
 import { set } from "./subcommands/set.js";
 import { clear } from "./subcommands/clear.js";
+import { status } from "./subcommands/status.js";
 
 export default async function color(interaction: Interaction) {
   if (!interaction.isChatInputCommand()) return;
@@ -11,6 +12,9 @@ export default async function color(interaction: Interaction) {
       break;
     case "clear":
       await clear(interaction);
+      break;
+    case "status":
+      await status(interaction);
       break;
   }
 }

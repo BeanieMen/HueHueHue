@@ -1,5 +1,7 @@
 import { GuildMember, Interaction } from "discord.js";
-
+import { colorRole } from "../../../constants";
+import { integrityFix } from "../../../helpers";
+const colorRoleName = await colorRole;
 export async function set(interaction: Interaction) {
   if (!interaction.isChatInputCommand()) return;
   const guild = interaction.guild;
@@ -11,66 +13,37 @@ export async function set(interaction: Interaction) {
     return;
   }
 
-  const roles = interaction.guild.roles.cache.filter(
-    (role) => role.name === "fav color",
-  );
-
-  // marker
-  let start = interaction.guild.roles.cache.find(
-    (role) => role.name === "<color>",
-  );
-  let end = interaction.guild.roles.cache.find(
-    (role) => role.name === "</color>",
-  );
-
-  if (!start) {
-    const startPos = roles.first()?.position;
-    start = await interaction.guild.roles.create({
-      name: "<color>",
-      color: 0x000000,
-      reason: `Creating a color marker`,
-    });
-    if (startPos) {
-      await start?.setPosition(startPos + 1);
-    }
-  }
-
-  if (!end) {
-    const endPos = roles.last()?.position;
-    end = await interaction.guild.roles.create({
-      name: "</color>",
-      color: 0x000000,
-      reason: `Creating a color marker`,
-    });
-    if (endPos) {
-      await end?.setPosition(endPos - 1);
-    } else {
-      await end?.setPosition(start?.position - 1);
-    }
-  }
-
   const user = interaction.member as GuildMember;
-
   const roleColor = Number(`0x${colorCode.substring(1)}`);
-  let role = user.roles.cache.find((role) => role.name === "fav color");
+  let role = user.roles.cache.find((role) => role.name === colorRoleName);
+  await interaction.reply(colorCode);
+
   if (!role) {
     try {
       role = await interaction.guild.roles.create({
-        name: "fav color",
+        name: colorRoleName,
         color: roleColor,
         reason: `Creating a color role for ${user.displayName}`,
       });
     } catch (error) {
       console.error("Error creating role:", error);
-      await interaction.reply("There was an error creating the role.");
+      await interaction.channel!.send("There was an error creating the role.");
       return;
     }
   } else if (role.color !== roleColor) {
-    await role.edit({
-      color: roleColor,
-    });
-    console.log(`Edited role color for ${user.displayName}`);
-    return;
+    try {
+      await role.edit({
+        color: roleColor,
+      });
+      console.log(`Edited role color for ${user.displayName}`);
+      return;
+    } catch {
+      console.log("Missing perms to edit users role color");
+      await interaction.channel!.send(
+        "Missing permissions to edit users role color",
+      );
+      return;
+    }
   }
 
   if (user && role) {
@@ -79,13 +52,20 @@ export async function set(interaction: Interaction) {
       console.log(`Role "${role.name}" has been added to ${user.displayName}`);
     } catch (error) {
       console.error("Error adding role to member:", error);
-      await interaction.reply(
+      await interaction.channel!.send(
         "There was an error adding the role to the member.",
       );
       return;
     }
   }
-  await role.setPosition(end.position + 1);
-
-  await interaction.reply(colorCode);
+  try {
+    const { end } = await integrityFix(interaction.guild.roles);
+    await role.setPosition(end.position + 1);
+  } catch {
+    console.log("Missing permissions");
+    await interaction.channel!.send(
+      "Missing permissions to set position of role",
+    );
+    return;
+  }
 }
