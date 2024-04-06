@@ -7,6 +7,7 @@ import {
   IRoleManager,
   OptionData,
 } from "./mock-types";
+import { setPosition, discordSort } from "./utils";
 export class MockInteraction implements IInteracion {
   options: {
     data: OptionData;
@@ -128,12 +129,16 @@ export class MockRoleManager implements IRoleManager {
     return Promise.resolve(role);
   }
 
-  setPosition(role: MockRole, position: number) {
-    if (position < 0) position = 0;
-    const rolesToAdjust = this.guild.roles.cache.filter(
-      (role) => role.position! >= position,
+  async setPosition(role: MockRole, position: number) {
+    const updatedRoles = setPosition(
+      role,
+      position,
+      false,
+      discordSort(this.guild.roles.cache),
     );
-    rolesToAdjust.forEach((role) => (role.position! += 1));
-    role.position = position;
+    updatedRoles.forEach((v) => {
+      const role = this.guild.roles.cache.get(v.id);
+      role!.position = v.position;
+    });
   }
 }
