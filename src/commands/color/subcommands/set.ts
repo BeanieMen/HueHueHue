@@ -1,7 +1,7 @@
 import { GuildMember, Interaction } from "discord.js";
 import { colorRole } from "../../../constants";
 import { integrityFix } from "../../../helpers";
-const colorRoleName = await colorRole;
+
 export async function set(interaction: Interaction) {
   if (!interaction.isChatInputCommand()) return;
   const guild = interaction.guild;
@@ -15,13 +15,13 @@ export async function set(interaction: Interaction) {
 
   const user = interaction.member as GuildMember;
   const roleColor = Number(`0x${colorCode.substring(1)}`);
-  let role = user.roles.cache.find((role) => role.name === colorRoleName);
+  let role = user.roles.cache.find((role) => role.name === colorRole);
   await interaction.reply(colorCode);
 
   if (!role) {
     try {
       role = await interaction.guild.roles.create({
-        name: colorRoleName,
+        name: colorRole,
         color: roleColor,
         reason: `Creating a color role for ${user.displayName}`,
       });

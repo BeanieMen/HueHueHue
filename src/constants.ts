@@ -23,14 +23,23 @@ export class HighDB<T> {
 
 interface config {
   colorRoleName: string;
+  colorRoleIds: string[];
+  markerStart: string;
+  markerEnd: string
 }
 
 const defaultConfig: config = {
   colorRoleName: "fav color",
+  colorRoleIds: [],
+  markerStart: "<color>",
+  markerEnd: "</color>"
 };
 
 export const config = new HighDB<config>("config.json", defaultConfig);
 await config.setConfig(await config.getConfig()); //just for initializing
-export const colorRole = config.getConfig().then((v) => {
-  return v.colorRoleName;
-});
+const configCache = await config.getConfig()
+
+export const colorRole = configCache.colorRoleName
+export const markerStart = configCache.markerStart
+export const markerEnd = configCache.markerEnd
+export const colorRoleIds = configCache.colorRoleIds

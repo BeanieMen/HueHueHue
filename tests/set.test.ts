@@ -2,13 +2,13 @@ import { set } from "../src/commands/color/subcommands/set.js";
 import { test, expect } from "vitest";
 import { Interaction } from "discord.js";
 import { MockInteraction, MockMember } from "./mock.js";
-import { colorRole } from "../src/constants.js";
-const colorRoleName = await colorRole;
+import { colorRole, markerEnd, markerStart } from "../src/constants.js";
+
 test("sets the role name and color for a valid hex code", async () => {
   const interaction = new MockInteraction({ color: "#ff0000" }, true);
   await set(interaction as unknown as Interaction);
   const createdRole = interaction.guild.roles.cache.find(
-    (role) => role.name === colorRoleName,
+    (role) => role.name === colorRole,
   );
 
   if (createdRole) {
@@ -37,10 +37,10 @@ test("checks assignment of role to user", async () => {
   const interaction = new MockInteraction({ color: "#696969" }, true);
   await set(interaction as unknown as Interaction);
   const role = interaction.member.roles.cache.find(
-    (role) => role.name === colorRoleName,
+    (role) => role.name === colorRole,
   );
   expect(interaction.replies).toBe("#696969");
-  expect(role?.name).toBe(colorRoleName);
+  expect(role?.name).toBe(colorRole);
   expect(role?.color).toEqual(0x696969);
 });
 
@@ -55,7 +55,6 @@ test("checks the position of the roles", async () => {
     interaction.guild,
   );
   await set(interaction as unknown as Interaction);
-  console.log(interaction.guild.roles.cache);
 
   const beaniesColor = interaction.guild.roles.cache.find(
     (role) => role.color === 0x696969,
@@ -64,10 +63,10 @@ test("checks the position of the roles", async () => {
     (role) => role.color === 0x121212,
   );
   const start = interaction.guild.roles.cache.find(
-    (role) => role.name === "<color>",
+    (role) => role.name === markerStart,
   );
   const end = interaction.guild.roles.cache.find(
-    (role) => role.name === "</color>",
+    (role) => role.name === markerEnd,
   );
 
   expect(start?.position).toEqual(3);
@@ -88,7 +87,7 @@ test("tests when two users want same color", async () => {
   await set(interaction as unknown as Interaction);
 
   const roles = interaction.guild.roles.cache.filter(
-    (role) => role.name === colorRoleName,
+    (role) => role.name === colorRole,
   );
   expect(roles.size).toEqual(1);
 });
@@ -97,7 +96,7 @@ test("tests when users want some other color while already having one", async ()
   const interaction = new MockInteraction({ color: "#696969" }, true);
   await set(interaction as unknown as Interaction);
   const roleId = interaction.member.roles.cache.find(
-    (role) => role.name === colorRoleName,
+    (role) => role.name === colorRole,
   )?.id;
 
   const interaction2 = new MockInteraction(
@@ -109,7 +108,7 @@ test("tests when users want some other color while already having one", async ()
   await set(interaction2 as unknown as Interaction);
 
   const roles = interaction2.guild.roles.cache.filter(
-    (role) => role.name === colorRoleName,
+    (role) => role.name === colorRole,
   );
   if (roleId) {
     expect(interaction.guild.roles.cache.get(roleId)?.color).toEqual({

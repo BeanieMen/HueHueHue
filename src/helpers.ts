@@ -1,23 +1,22 @@
 import { Role, RoleManager } from "discord.js";
-import { colorRole } from "./constants";
-const colorRoleName = await colorRole;
+import { colorRole, markerEnd, markerStart } from "./constants";
 
 export async function integrityFix(
   roleManager: RoleManager,
 ): Promise<{ start: Role; end: Role }> {
 
-  let start = roleManager.cache.find((role) => role.name === "<color>");
-  let end = roleManager.cache.find((role) => role.name === "</color>");
+  let start = roleManager.cache.find((role) => role.name === markerStart);
+  let end = roleManager.cache.find((role) => role.name === markerEnd);
   if (!start) {
     start = await roleManager.create({
-      name: "<color>",
+      name: markerStart,
       color: 0x000000,
       reason: `Creating a color marker`,
     });
   }
   if (!end) {
     end = await roleManager.create({
-      name: "</color>",
+      name: markerEnd,
       color: 0x000000,
       reason: `Creating a color marker`,
     });
@@ -25,13 +24,13 @@ export async function integrityFix(
   }
 
   const colorRoles = roleManager.cache.filter(
-    (role) => role.name === colorRoleName,
+    (role) => role.name === colorRole,
   );
   const nonColorRoles = roleManager.cache.filter(
     (role) =>
-      role.name !== colorRoleName &&
-      role.name !== "<color>" &&
-      role.name !== "</color>"
+      role.name !== colorRole &&
+      role.name !== markerStart &&
+      role.name !== markerEnd
   );
 
   // outside bounds
@@ -56,10 +55,10 @@ export async function integrityFix(
 }
 
 export async function statusCheck(roleManager: RoleManager): Promise<string> {
-  const start = roleManager.cache.find((role) => role.name === "<color>");
-  const end = roleManager.cache.find((role) => role.name === "</color>");
+  const start = roleManager.cache.find((role) => role.name === markerStart);
+  const end = roleManager.cache.find((role) => role.name === markerEnd);
   const colorRoles = roleManager.cache.filter(
-    (role) => role.name === colorRoleName,
+    (role) => role.name === colorRole,
   );
 
   if (!start || !end) {
@@ -69,9 +68,9 @@ export async function statusCheck(roleManager: RoleManager): Promise<string> {
 
   const nonColorRoles = roleManager.cache.filter(
     (role) =>
-      role.name !== colorRoleName &&
-      role.name !== "<color>" &&
-      role.name !== "</color>",
+      role.name !== colorRole &&
+      role.name !== markerStart &&
+      role.name !== markerEnd,
   );
 
   if (
