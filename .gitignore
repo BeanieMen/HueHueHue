@@ -10,3 +10,5 @@ static/dist
 .env
 out
 coverage
+config.json
+tests/test.config.json

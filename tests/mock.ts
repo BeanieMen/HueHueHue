@@ -99,8 +99,8 @@ export class MockRole implements IRole {
     this.guild.roles.cache.delete(this.id);
   }
 
-  edit(color: number) {
-    this.color = color;
+  edit(color: {color: number}) {
+    this.color = color.color;
   }
 }
 

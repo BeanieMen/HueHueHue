@@ -11,7 +11,7 @@ export interface IRole {
   position: number;
   id: Snowflake;
   delete: () => void;
-  edit: (color: number) => void;
+  edit: (color: {color:number}) => void;
 }
 export interface IMember {
   displayName?: string;

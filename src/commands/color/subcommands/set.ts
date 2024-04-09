@@ -1,6 +1,7 @@
 import { GuildMember, Interaction } from "discord.js";
 import { colorRole } from "../../../constants";
 import { integrityFix } from "../../../helpers";
+import { config } from "../../../constants";
 
 export async function set(interaction: Interaction) {
   if (!interaction.isChatInputCommand()) return;
@@ -16,22 +17,25 @@ export async function set(interaction: Interaction) {
   const user = interaction.member as GuildMember;
   const roleColor = Number(`0x${colorCode.substring(1)}`);
   let role = user.roles.cache.find((role) => role.name === colorRole);
-  await interaction.reply(colorCode);
 
   if (!role) {
     try {
+      await interaction.reply(colorCode);
       role = await interaction.guild.roles.create({
         name: colorRole,
         color: roleColor,
         reason: `Creating a color role for ${user.displayName}`,
       });
+      await config.setConfig({
+        colorRoleIds: [...config.data.colorRoleIds, role.id],
+      });
     } catch (error) {
       console.error("Error creating role:", error);
       await interaction.channel!.send("There was an error creating the role.");
-      return;
     }
   } else if (role.color !== roleColor) {
     try {
+      await interaction.reply(colorCode);
       await role.edit({
         color: roleColor,
       });
@@ -40,10 +44,12 @@ export async function set(interaction: Interaction) {
     } catch {
       console.log("Missing perms to edit users role color");
       await interaction.channel!.send(
-        "Missing permissions to edit users role color",
+        "Missing permissions to edit users role color"
       );
-      return;
     }
+  } else {
+    await interaction.reply("Color already added to user");
+    return;
   }
 
   if (user && role) {
@@ -53,18 +59,18 @@ export async function set(interaction: Interaction) {
     } catch (error) {
       console.error("Error adding role to member:", error);
       await interaction.channel!.send(
-        "There was an error adding the role to the member.",
+        "There was an error adding the role to the member."
       );
       return;
     }
   }
   try {
-    const { end } = await integrityFix(interaction.guild.roles);
-    await role.setPosition(end.position + 1);
+  const  {end} = await integrityFix(interaction.guild.roles);
+  await role!.setPosition(end.position)
   } catch {
     console.log("Missing permissions");
     await interaction.channel!.send(
-      "Missing permissions to set position of role",
+      "Missing permissions to set position of role"
     );
     return;
   }

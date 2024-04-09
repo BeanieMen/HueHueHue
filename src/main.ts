@@ -1,8 +1,9 @@
 import { Client, GatewayIntentBits, Collection } from "discord.js";
-import { config } from "dotenv";
+import dotenv from "dotenv";
 import Commands from "./commands";
+import { config, colorRole } from "./constants";
 import { setTimeout } from "timers/promises";
-config();
+dotenv.config();
 
 const client = new Client({
   intents: [
@@ -14,8 +15,20 @@ const client = new Client({
 const invites = new Collection<string, Collection<string, number | null>>();
 
 client.on("ready", async () => {
+  // initlizing db
+  await config.setConfig(config.data);
   await setTimeout(1000);
 
+  const configCache = config.data
+  for (const guild of client.guilds.cache.values()) {
+    for (let i = 0; i < configCache.colorRoleIds.length; i++) {
+      const role = await guild.roles.fetch(configCache.colorRoleIds[i]);
+      if (!role) continue;
+      if (role.name === colorRole) continue;
+      console.log("fixing potential untracked state changes")
+      await role.edit({name: colorRole})
+    }
+  }
   if (!client.user) return;
   console.log(`Logged in as ${client.user.tag}!`);
 
@@ -23,7 +36,7 @@ client.on("ready", async () => {
     const firstInvites = await guild.invites.fetch();
     invites.set(
       guild.id,
-      new Collection(firstInvites.map((invite) => [invite.code, invite.uses])),
+      new Collection(firstInvites.map((invite) => [invite.code, invite.uses]))
     );
   });
 });
@@ -51,7 +64,7 @@ client.on("guildMemberAdd", async (member) => {
   const invite = newInvites.find((i) => i.uses! > oldInvites.get(i.code)!);
   if (!invite) return;
   console.log(
-    `${member.user.tag} joined using invite code ${invite.code}. Invite was used ${invite.uses} times since its creation.`,
+    `${member.user.tag} joined using invite code ${invite.code}. Invite was used ${invite.uses} times since its creation.`
   );
   await invite.delete();
 });

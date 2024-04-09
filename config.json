@@ -1,6 +1,8 @@
 {
   "colorRoleName": "fav color",
-  "colorRoleIds": [],
+  "colorRoleIds": [
+    "1227183990180413520"
+  ],
   "markerStart": "<color>",
   "markerEnd": "</color>"
 }
