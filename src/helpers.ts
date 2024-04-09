@@ -47,7 +47,6 @@ export async function integrityFix(
 
   colorRoles.forEach(async (v) => {
     if (v.position > start.position || v.position < end.position) {
-      console.log("a")
       await v.setPosition(end.position);
     }
   });
